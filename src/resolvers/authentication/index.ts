@@ -51,9 +51,9 @@ export const onboard: GraphQLFieldConfig<any, Context, SignUpArgs> = {
   },
 };
 
-export const verifyToken: GraphQLFieldConfig<any, any> = {
+export const verifyToken: GraphQLFieldConfig<any, Context> = {
   type: Schema.nonNull(UserType),
-  resolve: (_1: any, _2: any, context: Context) => {
+  resolve: (_1, _2, context) => {
     try {
       const token = context.req.cookies["P_User"];
       const result = AuthController.verifyToken(token || "");
@@ -65,9 +65,32 @@ export const verifyToken: GraphQLFieldConfig<any, any> = {
   },
 };
 
-export const logout: GraphQLFieldConfig<any, any> = {
+export const verifyTokenMobile: GraphQLFieldConfig<
+  any,
+  Context,
+  { token: string }
+> = {
+  type: Schema.nonNull(UserType),
+  args: {
+    token: {
+      type: Schema.nonNull(GraphQLString),
+      description: "The user cookie",
+    },
+  },
+  resolve: (_, args) => {
+    try {
+      const result = AuthController.verifyToken(args.token || "");
+      const { email, name, id, verified } = result;
+      return { id, name, email, verified };
+    } catch (error) {
+      throw new GraphQLError("Authorization not found");
+    }
+  },
+};
+
+export const logout: GraphQLFieldConfig<any, Context> = {
   type: Schema.nonNull(GraphQLBoolean),
-  resolve: (_1: any, _2: any, context: Context) => {
+  resolve: (_1, _2, context) => {
     try {
       context.res.clearCookie("P_User", AuthController.cookieOptions);
       return true;

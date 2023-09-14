@@ -1,6 +1,14 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
 import { user, users } from "./user";
-import { login, logout, onboard, verifyToken } from "./authentication";
+import { feed, createPost } from "./post";
+import {
+  login,
+  logout,
+  onboard,
+  verifyToken,
+  verifyTokenMobile,
+} from "./authentication";
+import { addPostLike, removePostLike } from "./post-like";
 
 const QueryRoot = new GraphQLObjectType({
   name: "Query",
@@ -9,7 +17,9 @@ const QueryRoot = new GraphQLObjectType({
     users,
     login,
     logout,
+    feed,
     verifyToken,
+    verifyTokenMobile,
   }),
 });
 
@@ -17,6 +27,9 @@ const MutationRoot = new GraphQLObjectType({
   name: "Mutation",
   fields: () => ({
     onboard,
+    addPostLike,
+    removePostLike,
+    createPost,
   }),
 });
 

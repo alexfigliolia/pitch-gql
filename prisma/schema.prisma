@@ -8,9 +8,68 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  name     String
-  verified Boolean
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  name        String
+  verified    Boolean
+  Comment     Comment[]
+  CommentLike CommentLike[]
+  connections Connection[]
+  posts       Post[]
+  PostLike    PostLike[]
+}
+
+model Connection {
+  id      Int  @id @default(autoincrement())
+  from    Int
+  user_id Int
+  to      User @relation(fields: [user_id], references: [id])
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  title      String
+  text       String
+  tags       String[]
+  created_at DateTime   @default(now())
+  visibility Visibility
+  comments   Comment[]
+  created_by User       @relation(fields: [user_id], references: [id])
+  likes      PostLike[]
+}
+
+model PostLike {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  created_at DateTime @default(now())
+  post       Post     @relation(fields: [post_id], references: [id])
+  created_by User     @relation(fields: [user_id], references: [id])
+}
+
+model Comment {
+  id         Int           @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  text       String
+  created_at DateTime      @default(now())
+  post       Post          @relation(fields: [post_id], references: [id])
+  created_by User          @relation(fields: [user_id], references: [id])
+  likes      CommentLike[]
+}
+
+model CommentLike {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  comment_id Int
+  created_at DateTime @default(now())
+  comment    Comment  @relation(fields: [comment_id], references: [id])
+  created_by User     @relation(fields: [user_id], references: [id])
+}
+
+enum Visibility {
+  public
+  friends
 }
