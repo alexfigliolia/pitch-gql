@@ -25,9 +25,9 @@ export class AuthController {
   }
 
   public static async onboard({ name, email, password }: SignUpArgs) {
-    const user = await DB.user.findUnique({
+    const user = await DB.user.findFirst({
       where: {
-        email,
+        email: email.toLowerCase(),
       },
     });
     if (user) {

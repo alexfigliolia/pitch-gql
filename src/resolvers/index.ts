@@ -8,6 +8,7 @@ import {
   verifyToken,
   verifyTokenMobile,
 } from "./authentication";
+import { postComments, createComment } from "./comment";
 import { addPostLike, removePostLike } from "./post-like";
 
 const QueryRoot = new GraphQLObjectType({
@@ -19,6 +20,7 @@ const QueryRoot = new GraphQLObjectType({
     logout,
     feed,
     verifyToken,
+    postComments,
     verifyTokenMobile,
   }),
 });
@@ -30,6 +32,7 @@ const MutationRoot = new GraphQLObjectType({
     addPostLike,
     removePostLike,
     createPost,
+    createComment,
   }),
 });
 
