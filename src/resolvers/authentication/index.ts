@@ -56,9 +56,7 @@ export const verifyToken: GraphQLFieldConfig<any, Context> = {
   resolve: (_1, _2, context) => {
     try {
       const token = context.req.cookies["P_User"];
-      const result = AuthController.verifyToken(token || "");
-      const { email, name, id } = result;
-      return { id, name, email };
+      return AuthController.verifyToken(token || "");
     } catch (error) {
       throw new GraphQLError("Authorization not found");
     }
@@ -79,9 +77,7 @@ export const verifyTokenMobile: GraphQLFieldConfig<
   },
   resolve: (_, args) => {
     try {
-      const result = AuthController.verifyToken(args.token || "");
-      const { email, name, id, verified } = result;
-      return { id, name, email, verified };
+      return AuthController.verifyToken(args.token || "");
     } catch (error) {
       throw new GraphQLError("Authorization not found");
     }

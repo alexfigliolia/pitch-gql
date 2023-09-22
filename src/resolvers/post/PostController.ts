@@ -37,13 +37,41 @@ export class PostController {
       take: 50,
       skip: startIndex,
       orderBy: [
+        { created_at: "desc" },
         {
           likes: {
             _count: "desc",
           },
         },
-        { created_at: "desc" },
       ],
+      include: {
+        likes: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        created_by: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
+  public static getProfileFeed({ id, startIndex }: IFeed) {
+    return DB.post.findMany({
+      where: {
+        created_by: {
+          id,
+        },
+      },
+      take: 50,
+      skip: startIndex,
+      orderBy: { created_at: "desc" },
       include: {
         likes: true,
         _count: {

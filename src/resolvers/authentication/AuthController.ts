@@ -4,7 +4,8 @@ import { DB } from "db";
 import { GraphQLError } from "graphql";
 import type { CookieOptions } from "express";
 import { Environment } from "Environment";
-import type { LoginArgs, SignUpArgs, User } from "./types";
+import type { LoginArgs, SignUpArgs } from "./types";
+import type { User } from "@prisma/client";
 
 export class AuthController {
   private static SALTS = 10;
@@ -43,17 +44,12 @@ export class AuthController {
     });
   }
 
-  public static generateToken<T extends User>({
-    email,
-    name,
-    id,
-    verified,
-  }: T) {
-    return JWT.sign({ id, name, email, verified }, Environment.TOKEN);
+  public static generateToken(user: User) {
+    return JWT.sign(user, Environment.TOKEN);
   }
 
   public static verifyToken(token: string) {
-    return JWT.verify(token, Environment.TOKEN) as Omit<User, "password">;
+    return JWT.verify(token, Environment.TOKEN) as User;
   }
 
   public static cookieOptions: CookieOptions = {

@@ -13,6 +13,7 @@ model User {
   password    String
   name        String
   verified    Boolean
+  image       String        @default("")
   Comment     Comment[]
   CommentLike CommentLike[]
   connections Connection[]

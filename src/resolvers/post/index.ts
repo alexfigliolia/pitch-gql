@@ -92,6 +92,23 @@ export const feed: GraphQLFieldConfig<any, Context, IFeed> = {
   },
 };
 
+export const profileFeed: GraphQLFieldConfig<any, Context, IFeed> = {
+  type: Schema.nonNullArray(PostType),
+  args: {
+    id: {
+      type: Schema.nonNull(GraphQLInt),
+      description: "User primary key",
+    },
+    startIndex: {
+      type: Schema.nonNull(GraphQLInt),
+      description: "The start index of posts to pull",
+    },
+  },
+  resolve: (_, args) => {
+    return PostController.getProfileFeed(args);
+  },
+};
+
 export const createPost: GraphQLFieldConfig<any, Context, ICreatePost> = {
   type: Schema.nonNull(PostType),
   args: {

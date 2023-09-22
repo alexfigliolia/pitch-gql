@@ -24,6 +24,10 @@ export const UserType = new GraphQLObjectType({
       type: Schema.nonNull(GraphQLString),
       resolve: (user) => user.email,
     },
+    image: {
+      type: Schema.nonNull(GraphQLString),
+      resolve: (user) => user.image,
+    },
     verified: {
       type: Schema.nonNull(GraphQLBoolean),
       resolve: (user) => user.verified,
